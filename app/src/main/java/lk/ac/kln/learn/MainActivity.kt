@@ -3,12 +3,9 @@ package lk.ac.kln.learn
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
@@ -16,24 +13,23 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.compose.*
 import kotlinx.coroutines.launch
 import lk.ac.kln.learn.ui.composables.LystBottomAppBar
 import lk.ac.kln.learn.ui.composables.LystCard
-import lk.ac.kln.learn.ui.theme.LearnTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            LearnTheme {
+            AppTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = androidx.compose.material3.MaterialTheme.colorScheme.surface
                 ) {
                     Remember()
                 }
@@ -67,10 +63,7 @@ fun Remember() {
                 navigationIcon = {
                     Text(
                         "Lyst Shopping",
-                        style = androidx.compose.material.MaterialTheme.typography.overline.copy(
-                            fontSize = 24.sp,
-                            color = androidx.compose.material3.MaterialTheme.colorScheme.primary
-                        ),
+                        style = TextStyle(fontSize = 24.sp,),
                         modifier = Modifier.padding(start = 10.dp)
                     )
                 },
@@ -83,7 +76,10 @@ fun Remember() {
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    actionIconContentColor = androidx.compose.material3.MaterialTheme.colorScheme.primary
+                    containerColor = md_theme_light_surface,
+                    titleContentColor = md_theme_light_onPrimaryContainer,
+                    actionIconContentColor = md_theme_light_onPrimaryContainer,
+                    navigationIconContentColor = md_theme_light_onPrimaryContainer
                 )
             )
         },
@@ -125,7 +121,8 @@ fun Remember() {
         )
         LazyColumn(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
+                .background(color = md_theme_light_surface)
                 .padding(
                     bottom = paddingValues.calculateBottomPadding(),
                     top = paddingValues.calculateTopPadding() + 15.dp

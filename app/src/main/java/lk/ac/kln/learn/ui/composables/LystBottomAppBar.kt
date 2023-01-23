@@ -10,13 +10,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.compose.md_theme_light_onPrimaryContainer
+import com.example.compose.md_theme_light_primaryContainer
+import com.example.compose.md_theme_light_surface
 
 @Composable
 fun LystBottomAppBar(handler: () -> Unit) {
     BottomAppBar(
         contentPadding = PaddingValues(horizontal = 20.dp),
-        containerColor = androidx.compose.material3.MaterialTheme.colorScheme.background,
-        contentColor = androidx.compose.material3.MaterialTheme.colorScheme.primary,
+        containerColor = md_theme_light_surface,
+        contentColor = md_theme_light_onPrimaryContainer,
         tonalElevation = 10.dp
     )
     {
@@ -41,8 +44,8 @@ fun LystBottomAppBar(handler: () -> Unit) {
                 onClick = { handler() },
                 contentPadding = PaddingValues(horizontal = 35.dp, vertical = 20.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = androidx.compose.material3.MaterialTheme.colorScheme.primary,
-                    contentColor = androidx.compose.material3.MaterialTheme.colorScheme.background
+                    containerColor = md_theme_light_primaryContainer,
+                    contentColor = md_theme_light_onPrimaryContainer
                 )
             ) {
                 Text(text = "New Item", style = MaterialTheme.typography.button, modifier = Modifier.padding(end = 5.dp))

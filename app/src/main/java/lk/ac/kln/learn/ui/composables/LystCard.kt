@@ -15,6 +15,10 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.compose.md_theme_light_onSurfaceVariant
+import com.example.compose.md_theme_light_onTertiaryContainer
+import com.example.compose.md_theme_light_surfaceVariant
+import com.example.compose.md_theme_light_tertiaryContainer
 import lk.ac.kln.learn.CardDetail
 import lk.ac.kln.learn.ui.theme.Shapes
 
@@ -43,22 +47,21 @@ fun LystCard(cardDetail: CardDetail) {
                     durationMillis = 300,
                     easing = LinearOutSlowInEasing
                 )
-            )
-            .border(color = MaterialTheme.colorScheme.primary, width = 5.dp),
+            ),
         colors = CardDefaults.elevatedCardColors(
-            contentColor = Color.White,
-            containerColor = MaterialTheme.colorScheme.background,
+            contentColor = md_theme_light_onSurfaceVariant,
+            containerColor = md_theme_light_surfaceVariant,
         ),
         shape = Shapes.large,
         onClick = { expandedState = !expandedState }
     ) {
 
         Column(
-            modifier = Modifier.padding(horizontal = 15.dp, vertical = 20.dp)
+            modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp)
         ) {
             Text(
                 "${cardDetail.title}",
-                style = androidx.compose.material.MaterialTheme.typography.button.copy(fontSize = 30.sp),
+                style = androidx.compose.material.MaterialTheme.typography.button.copy(fontSize = 20.sp),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
