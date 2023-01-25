@@ -3,6 +3,7 @@ package lk.ac.kln.learn
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,11 +19,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.compose.*
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
+import lk.ac.kln.learn.model.Item
 import lk.ac.kln.learn.ui.composables.LystBottomAppBar
 import lk.ac.kln.learn.ui.composables.LystCard
+import lk.ac.kln.learn.viewmodel.ItemViewModel
+import lk.ac.kln.learn.viewmodel.ItemViewModelAbstract
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private val itemViewModel: ItemViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -31,7 +42,7 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                 ) {
-                    Remember()
+                    Remember(itemViewModel)
                 }
             }
         }
@@ -47,9 +58,10 @@ data class CardDetail(
 
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
 @Composable
-fun Remember() {
+fun Remember(itemViewModel: ItemViewModelAbstract) {
+
+    val itemListState = itemViewModel.itemListFlow.collectAsState(initial = listOf())
 
     val snackbarHostState = remember {
         SnackbarHostState()
@@ -63,7 +75,7 @@ fun Remember() {
                 navigationIcon = {
                     Text(
                         "Lyst Shopping",
-                        style = TextStyle(fontSize = 24.sp,),
+                        style = TextStyle(fontSize = 24.sp),
                         modifier = Modifier.padding(start = 10.dp)
                     )
                 },
@@ -84,7 +96,11 @@ fun Remember() {
             )
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-        bottomBar = { LystBottomAppBar(handler = { scope.launch { snackbarHostState.showSnackbar("Hey!!! Jetpack") } }) },
+        bottomBar = {
+            LystBottomAppBar(
+                itemViewModel = itemViewModel,
+                handler = { scope.launch { snackbarHostState.showSnackbar("Hey!!! Jetpack") } })
+        },
     ) { paddingValues ->
 
         val cards = mutableListOf(
@@ -121,8 +137,8 @@ fun Remember() {
         )
         LazyColumn(
             modifier = Modifier
-                .fillMaxSize()
-                .background(color = md_theme_light_surface)
+//                .fillMaxSize()
+//                .background(color = md_theme_light_surface)
                 .padding(
                     bottom = paddingValues.calculateBottomPadding(),
                     top = paddingValues.calculateTopPadding() + 15.dp
@@ -130,12 +146,33 @@ fun Remember() {
                 .padding(horizontal = 10.dp)
         ) {
 
-            items(cards.size) {
-                LystCard(cards[it])
+            items(itemListState.value.size) { index ->
+                val item = itemListState.value[index]
+                LystCard(text = item.text)
                 Spacer(modifier = Modifier.height(15.dp))
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun RememberPreview() {
+    Remember(itemViewModel = object : ItemViewModelAbstract {
+        override val itemListFlow: Flow<List<Item>>
+            get() = flowOf(
+                listOf(
+                    Item(text = "Item One"),
+                    Item(text = "Item Two"),
+                    Item(text = "Item Three"),
+                    Item(text = "Item Four"),
+                    Item(text = "Item Five"),
+                    Item(text = "Item Six"),
+                )
+            )
+
+        override fun addItem(item: Item) {}
+    })
 }
 
 
